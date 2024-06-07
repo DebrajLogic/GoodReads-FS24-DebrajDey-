@@ -1,15 +1,40 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function BookDetails() {
   const { id } = useParams();
-  const book = useSelector((state) =>
-    state.books.books.find((book) => book.id === parseInt(id))
-  );
+  const [loading, setLoading] = useState(true);
+  const [book, setBook] = useState(null);
 
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`http://localhost:3000/book-details/${id}`)
+      .then((response) => {
+        setBook(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching book details:", error);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   if (!book) {
-    return <div>Book not found</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="bg-gray-200 rounded-lg p-8 shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Book Not Found!</h2>
+          <p className="text-gray-600">
+            The book you are looking for does not exist.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
