@@ -1,37 +1,33 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 function BookDetails() {
-  const link =
-    "https://m.media-amazon.com/images/I/51Se3lYJuoL._SY445_SX342_.jpg";
+  const { id } = useParams();
+  const book = useSelector((state) =>
+    state.books.books.find((book) => book.id === parseInt(id))
+  );
+
+  if (!book) {
+    return <div>Book not found</div>;
+  }
+
   return (
     <div className="h-full p-8 flex gap-4 bg-gray-300">
       <div className="flex-2">
-        <div className="p-4 bg-gray-200 shadow-lg">
-          <img className="rounded" src={link} alt="" />
+        <div className="p-4 bg-gray-100 shadow-lg">
+          <img className="rounded" src={book.image} alt={book.title} />
         </div>
       </div>
       <div className="flex-1 flex-col">
-        <div className="m-4 mb-6 p-5 flex flex-col gap-4 bg-gray-200 border shadow-lg">
-          <h3 className="text-3xl font-semibold text-gray-600">Book Name</h3>
+        <div className="m-4 mb-6 p-5 flex flex-col gap-4 bg-gray-100 border shadow-lg">
+          <h3 className="text-3xl font-semibold text-gray-600">{book.title}</h3>
           <h4 className="text-2xl font-medium text-gray-400">
-            Author Name: Amily
+            Author Name: {book.author}
           </h4>
-          <p className="text-lg text-gray-600">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique
-            labore ullam rem mollitia suscipit necessitatibus nisi harum
-            repellendus, dicta doloremque cum eum accusamus, ea laudantium
-            excepturi dolor eius maiores a assumenda quo aliquam! Minima fugit,
-            unde provident dolore earum doloribus, fugiat assumenda soluta
-            quaerat in natus error asperiores perferendis iusto iste recusandae,
-            nam temporibus corporis cupiditate esse? Suscipit distinctio
-            facilis, ipsa a rerum nostrum minima sed expedita consectetur ab,
-            officia repudiandae dicta commodi id nulla ex laborum, nesciunt
-            perferendis? Quisquam, dolore natus temporibus doloribus officia
-            similique aperiam repellat doloremque consequatur dolor optio
-            ducimus eaque veritatis? Fugit quo expedita dicta rem.
-          </p>
+          <p className="text-lg text-gray-600">{book.description}</p>
         </div>
-        <div className="m-4 mt-6 p-5 flex flex-col gap-4 bg-gray-200 border shadow-lg">
+        <div className="m-4 mt-6 p-5 flex flex-col gap-4 bg-gray-100 border shadow-lg">
           <h3 className="text-2xl font-semibold text-gray-600">
             Rating & Reviews
           </h3>
